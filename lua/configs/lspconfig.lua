@@ -1,10 +1,10 @@
--- EXAMPLE 
+-- EXAMPLE
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls", "clangd", "gopls", "bufls", "eslint", "tailwindcss", "pyright" }
+local servers = { "html", "cssls", "clangd", "gopls", "bufls", "eslint", "pyright", "prismals" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -17,12 +17,13 @@ for _, lsp in ipairs(servers) do
 end
 
 -- typescript
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   on_init = on_init,
   root_dir = lspconfig.util.root_pattern ".git",
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
+    -- client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.documentFormattingProvider = false
   end,
   capabilities = capabilities,
   handlers = {
@@ -58,10 +59,10 @@ lspconfig.pyright.setup {
 }
 
 lspconfig.eslint.setup {
-  root_dir = lspconfig.util.root_pattern ".git",
+  root_dir = lspconfig.util.root_pattern(".eslintrc.json", ".eslintrc.js", ".git") or vim.fn.getcwd(),
   settings = {
     packageManager = "yarn",
-    nodePath = ".yarn/sdks"
+    nodePath = ".yarn/sdks",
   },
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
@@ -70,4 +71,15 @@ lspconfig.eslint.setup {
   capabilities = capabilities,
 }
 
-
+require("lspconfig").tailwindcss.setup {
+  settings = {
+    tailwindCSS = {
+      experimental = {
+        classRegex = {
+          { "cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+          { "cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+        },
+      },
+    },
+  },
+}

@@ -1,20 +1,20 @@
 ---@type ChadrcConfig
 local M = {}
 
-M.ui = {
-  theme = "tokyodark",
+M = {
+  base46 = {
+    theme = "tokyodark",
+    transparency = true,
+    --   hl_override = {
+    --     Comment = { italic = true },
+    --     ["@comment"] = { italic = true },
+    --     Visual = {
+    --       bg = { "grey", 2 },
+    --     },
+    --   },
+  },
   nvdash = {
     load_on_startup = true,
-  },
-  hl_override = {
-    Comment = { italic = true },
-    ["@comment"] = { italic = true },
-    Visual = {
-      bg = { "grey", 2 },
-    },
-  },
-  telescope = {
-    style = "bordered",
   },
   term = {
     float = {
@@ -26,9 +26,19 @@ M.ui = {
       border = "single",
     },
   },
-  tabufline = {
-    order = { "buffers", "tabs", "treeOffset", "btns" },
+  ui = {
+    statusline = { theme = "vscode_colored", separator_style = "round" },
+    cmp = {
+      icons_left = true,
+    },
+    telescope = {
+      style = "bordered",
+    },
+
+    tabufline = {
+      transparency = true,
+      order = { "buffers", "tabs", "treeOffset", "btns" },
+    },
   },
-  -- transparency = true,
 }
 return M

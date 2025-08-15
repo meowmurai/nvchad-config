@@ -7,7 +7,8 @@ local options = {
     typescript = { "prettierd" },
     javascriptreact = { "prettierd" },
     typescriptreact = { "prettierd" },
-    go = { "goimports","goimports-reviser", "gofmt" },
+    go = { "goimports", "goimports-reviser", "gofmt" },
+    python = { "black" },
   },
 
   -- format_on_save = {

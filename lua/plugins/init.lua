@@ -1,5 +1,66 @@
 return {
   {
+    "nvchad/ui",
+    config = function()
+      require "nvchad"
+    end,
+  },
+
+  {
+    "nvchad/base46",
+    version = false,
+    lazy = true,
+    build = function()
+      require("base46").load_all_highlights()
+    end,
+  },
+  "nvzone/volt",
+  { import = "nvchad.blink.lazyspec" },
+  {
+    "github/copilot.vim",
+    lazy = false,
+    config = function() -- Mapping tab is already used in NvChad
+      vim.g.copilot_no_tab_map = true -- Disable tab mapping
+      vim.g.copilot_assume_mapped = true -- Assume that the mapping is already done
+    end,
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    lazy = false,
+    dependencies = {
+      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = require "configs.copilot-chat",
+  },
+  {
+    "eero-lehtinen/oklch-color-picker.nvim",
+    event = "VeryLazy",
+    version = "*",
+    keys = {
+      -- One handed keymap recommended, you will be using the mouse
+      {
+        "<leader>v",
+        function()
+          require("oklch-color-picker").pick_under_cursor()
+        end,
+        desc = "Color pick under cursor",
+      },
+    },
+    ---@type oklch.Opts
+    opts = {},
+  },
+  {
+    "brenoprata10/nvim-highlight-colors",
+    lazy = false,
+    opts = require "configs.highlight-colors",
+    config = function(opts)
+      vim.opt.termguicolors = true
+      require("nvim-highlight-colors").setup(opts)
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre' -- uncomment for format on save
     config = function()
@@ -70,7 +131,7 @@ return {
           max_lines = 0,
           min_window_height = 0,
           line_numbers = true,
-          multiline_threshold = 20,
+          multiline_threshold = 10,
           trim_scope = "outer",
           mode = "cursor",
           separator = nil,
